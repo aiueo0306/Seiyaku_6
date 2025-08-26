@@ -1,0 +1,135 @@
+name: Update RSS feed every hour
+
+on:
+  schedule:
+    - cron: '0 * * * *'  # 毎時0分に実行（UTC）
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write   # GITHUB_TOKEN に push 権限を与える
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+
+      - name: Download shared requirements
+        run: curl -O https://raw.githubusercontent.com/aiueo0306/shared-python-env/main/requirements.txt
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          playwright install chromium
+
+      # === RSSスクリプトの実行（失敗しても止めない） ===
+      - name: Run RSS1
+        run: python RSS1.py || echo "RSS1.py failed" >> errors.log
+        continue-on-error: true
+
+      - name: Run RSS2
+        run: python RSS2.py || echo "RSS2.py failed" >> errors.log
+        continue-on-error: true
+
+      - name: Run RSS3
+        run: python RSS3.py || echo "RSS3.py failed" >> errors.log
+        continue-on-error: true
+
+      - name: Run RSS4
+        run: python RSS4.py || echo "RSS4.py failed" >> errors.log
+        continue-on-error: true
+
+      - name: Run RSS5
+        run: python RSS5.py || echo "RSS5.py failed" >> errors.log
+        continue-on-error: true
+
+      - name: Run RSS6
+        run: python RSS6.py || echo "RSS6.py failed" >> errors.log
+        continue-on-error: true
+
+      - name: Run RSS7
+        run: python RSS7.py || echo "RSS7.py failed" >> errors.log
+        continue-on-error: true
+
+      - name: Run RSS8
+        run: python RSS8.py || echo "RSS8.py failed" >> errors.log
+        continue-on-error: true
+
+      - name: Run RSS9
+        run: python RSS9.py || echo "RSS9.py failed" >> errors.log
+        continue-on-error: true
+
+      - name: Run RSS10
+        run: python RSS10.py || echo "RSS10.py failed" >> errors.log
+        continue-on-error: true
+
+      - name: Run RSS11
+        run: python RSS11.py || echo "RSS11.py failed" >> errors.log
+        continue-on-error: true
+
+      - name: Run RSS12
+        run: python RSS12.py || echo "RSS12.py failed" >> errors.log
+        continue-on-error: true
+
+      - name: Run RSS13
+        run: python RSS13.py || echo "RSS13.py failed" >> errors.log
+        continue-on-error: true
+
+      - name: Run RSS14
+        run: python RSS14.py || echo "RSS14.py failed" >> errors.log
+        continue-on-error: true
+
+      - name: Run RSS15
+        run: python RSS15.py || echo "RSS15.py failed" >> errors.log
+        continue-on-error: true
+
+      - name: Run RSS16
+        run: python RSS16.py || echo "RSS16.py failed" >> errors.log
+        continue-on-error: true
+
+      - name: Run RSS17
+        run: python RSS17.py || echo "RSS17.py failed" >> errors.log
+        continue-on-error: true
+
+      - name: Run RSS18
+        run: python RSS18.py || echo "RSS18.py failed" >> errors.log
+        continue-on-error: true
+
+      - name: Run RSS19
+        run: python RSS19.py || echo "RSS19.py failed" >> errors.log
+        continue-on-error: true
+        
+      - name: Run RSS20
+        run: python RSS20.py || echo "RSS20.py failed" >> errors.log
+        continue-on-error: true
+
+      - name: Merge RSS feeds into combined.xml
+        run: python merge_feeds.py
+
+      # === XMLの保存・プッシュ ===
+      - name: Commit and push changes
+        run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git add rss_output/*.xml
+          git commit -m "[bot] Update RSS feed" || echo "No changes to commit"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          git push origin main
+
+      # === 失敗検知＆通知用エラー判定 ===
+      - name: Check for errors and mark job as failed
+        run: |
+          if [ -f errors.log ]; then
+            echo "❌ The following RSS scripts failed:"
+            cat errors.log
+            exit 1  # ← GitHubが通知を送るトリガー
+          else
+            echo "✅ All scripts completed successfully."
+          fi

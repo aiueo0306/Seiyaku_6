@@ -1,0 +1,42 @@
+name: Update RSS feed every hour
+
+on:
+  #schedule:
+  #  - cron: '0 * * * *'  # 毎時0分に実行（UTC）
+  workflow_dispatch:      # 手動実行も可能
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write   # GITHUB_TOKEN に push 権限を与える
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+
+      - name: Download shared requirements
+        run: curl -O https://raw.githubusercontent.com/aiueo0306/shared-python-env/main/requirements.txt
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          playwright install chromium  # ← Playwrightブラウザをインストール
+
+      - name: Run RSS Generator
+        run: python RSS4.py  # ← ファイル名を適宜変更
+
+      - name: Commit and push changes
+        run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git add rss_output/*.xml
+          git commit -m "[bot] Update RSS feed" || echo "No changes to commit"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          git push origin main
