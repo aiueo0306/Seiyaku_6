@@ -70,8 +70,8 @@ with sync_playwright() as p:
 
     try:
         print("▶ ページにアクセス中...")
-        page.goto(BASE_URL, timeout=30000)
-        page.wait_for_load_state("domcontentloaded", timeout=30000)
+        page.goto(BASE_URL, timeout=240000)
+        page.wait_for_load_state("domcontentloaded", timeout=240000)
         print("🌐 到達URL:", page.url)
 
         # ---- ポップアップ順に処理（POPUP_MODE が 1 のときだけ実行）----
@@ -87,7 +87,7 @@ with sync_playwright() as p:
             print("ℹ ポップアップ処理はスキップしました（POPUP_MODE=0 または ボタン未指定）")
 
         # 本文読み込み
-        page.wait_for_load_state("load", timeout=30000)
+        page.wait_for_load_state("load", timeout=240000)
 
     except PlaywrightTimeoutError:
         print("⚠ ページの読み込みに失敗しました。")

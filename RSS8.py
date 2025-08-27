@@ -69,8 +69,8 @@ with sync_playwright() as p:
 
     try:
         print("▶ ページにアクセス中...")
-        page.goto(BASE_URL, timeout=30000)
-        page.wait_for_load_state("domcontentloaded", timeout=30000)
+        page.goto(BASE_URL, timeout=240000)
+        page.wait_for_load_state("domcontentloaded", timeout=240000)
         print("🌐 到達URL:", page.url)
 
         # ---- ポップアップ順に処理 ----
