@@ -59,38 +59,38 @@ jobs:
           git push origin main
 
       # === 失敗検知＆通知用エラー判定 ===
+            # === 失敗検知＆通知用エラー判定 ===
       - name: Check for errors and mark job as failed
         run: |
           if [ -f errors.log ]; then
             echo "❌ The following RSS scripts failed:"
             cat errors.log
-            exit 1  # ← GitHubが通知を送るトリガー
+            # exit 1  ← ここは削除（成功扱いにする）
           else
             echo "✅ All scripts completed successfully."
           fi
 
       - name: Comment failed scripts to issue
-        if: failure()
+        if: always()   # ← failure() から変更
         uses: actions/github-script@v7
         with:
           script: |
             const fs = require('fs');
-            let errors = "errors.log not found";
-            if (fs.existsSync('errors.log')) {
-              errors = fs.readFileSync('errors.log', 'utf8');
+            if (!fs.existsSync('errors.log')) {
+              return; // 失敗がなければ何もしない
             }
-      
+            const errors = fs.readFileSync('errors.log', 'utf8');
             const issueTitle = "🚨 RSS script failure";
-      
+
             // 既存のオープンIssueを探す
             const { data: issues } = await github.rest.issues.listForRepo({
               owner: context.repo.owner,
               repo: context.repo.repo,
               state: "open"
             });
-      
+
             let existing = issues.find(issue => issue.title === issueTitle);
-      
+
             if (!existing) {
               // なければ新規作成
               const { data: issue } = await github.rest.issues.create({
@@ -101,7 +101,7 @@ jobs:
               });
               existing = issue;
             }
-      
+
             // コメントを追加（ここが通知される）
             await github.rest.issues.createComment({
               owner: context.repo.owner,
