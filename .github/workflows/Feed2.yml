@@ -1,0 +1,14 @@
+name: Update RSS feed every hour
+
+on:
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  call-shared:
+    uses: aiueo0306/shared-python-env/.github/workflows/run-rss-workflow.yml@main
