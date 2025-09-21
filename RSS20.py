@@ -26,7 +26,7 @@ from browser_utils import click_button_in_order
 
 # ===== 固定情報（学会サイト） =====
 BASE_URL = "https://www.fuso-pharm.co.jp/news/"
-GAKKAI = "扶桑薬品"
+GAKKAI = "扶桑薬品(ニュース)"
 
 SELECTOR_TITLE = "div.news_list.--top a"
 title_selector = "div.news_list__title"

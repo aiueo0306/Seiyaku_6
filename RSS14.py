@@ -27,7 +27,7 @@ from browser_utils import click_button_in_order
 
 # ===== 固定情報（学会サイト） =====
 BASE_URL = "https://www.fushimi.co.jp/#gsc.tab=0"
-GAKKAI = "伏見製薬所"
+GAKKAI = "伏見製薬所(ニュース)"
 
 SELECTOR_TITLE = "ul.rs li.news_item"
 title_selector = "h3"

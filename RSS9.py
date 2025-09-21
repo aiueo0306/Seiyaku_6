@@ -26,7 +26,7 @@ from browser_utils import click_button_in_order
 
 # ===== 固定情報（学会サイト） =====
 BASE_URL = "https://biomedix.co.jp/"
-GAKKAI = "ビオメディクス"
+GAKKAI = "ビオメディクス(ニュース)"
 
 SELECTOR_TITLE = "div.wrap li"
 title_selector = "a"

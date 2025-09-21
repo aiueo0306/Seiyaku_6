@@ -25,11 +25,11 @@ from scraper_utils import extract_items
 from browser_utils import click_button_in_order
 
 # ===== 固定情報（学会サイト） =====
-BASE_URL = "https://fujinaga-pharm.co.jp/"
-GAKKAI = "藤永製薬(ニュース)"
+BASE_URL = "https://fujinaga-pharm.co.jp/medical/index.html"
+GAKKAI = "藤永製薬（医療従事者）"
 
-SELECTOR_TITLE = "div.overview section"
-title_selector = "h2"
+SELECTOR_TITLE = "div.viewport section"
+title_selector = "a"
 title_index = 0
 href_selector = "a"
 href_index = 0
@@ -46,7 +46,7 @@ date_regex = rf"(\d{{2,4}}){year_unit}(\d{{1,2}}){month_unit}(\d{{1,2}}){day_uni
 
 # ===== ポップアップ順序クリック設定 =====
 POPUP_MODE = 0  # 0: ポップアップ処理しない, 1: 処理する
-POPUP_BUTTONS = [""] if POPUP_MODE else [] 
+POPUP_BUTTONS = ["はい"] if POPUP_MODE else [] 
 WAIT_BETWEEN_POPUPS_MS = 500
 BUTTON_TIMEOUT_MS = 12000
 
@@ -114,6 +114,6 @@ with sync_playwright() as p:
         print("⚠ 抽出できた記事がありません。HTML構造が変わっている可能性があります。")
 
     os.makedirs("rss_output", exist_ok=True)
-    rss_path = "rss_output/Feed17.xml"
+    rss_path = "rss_output/Feed17-2.xml"
     generate_rss(items, rss_path, BASE_URL, GAKKAI)
     browser.close()

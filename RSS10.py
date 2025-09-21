@@ -45,8 +45,8 @@ date_regex = rf"(\d{{2,4}}){year_unit}(\d{{1,2}}){month_unit}(\d{{1,2}}){day_uni
 # date_regex = rf"(\d{{2,4}}){year_unit}(\d{{1,2}}){month_unit}(\d{{1,2}}){day_unit}"
 
 # ===== ポップアップ順序クリック設定 =====
-POPUP_MODE = 0  # 0: ポップアップ処理しない, 1: 処理する
-POPUP_BUTTONS = [""] if POPUP_MODE else [] 
+POPUP_MODE = 1  # 0: ポップアップ処理しない, 1: 処理する
+POPUP_BUTTONS = ["はい"] if POPUP_MODE else [] 
 WAIT_BETWEEN_POPUPS_MS = 500
 BUTTON_TIMEOUT_MS = 12000
 

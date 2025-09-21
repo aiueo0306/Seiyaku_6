@@ -27,7 +27,7 @@ from browser_utils import click_button_in_order
 
 # ===== 固定情報（学会サイト） =====
 BASE_URL = "https://www.npi-inc.co.jp/newslist.php"
-GAKKAI = "日本薬品工業"
+GAKKAI = "日本薬品工業(ニュース)"
 
 SELECTOR_TITLE = "td.td_gaiyou"
 title_selector = ""
@@ -41,11 +41,8 @@ year_unit = ""      # 年の後に区切り記号なし
 month_unit = " "    # 月と日の間の区切りスペース
 day_unit = ","      # 日の後にカンマ
 
-# フォーマット（%b は英語短縮月名: Jan, Feb, ... Aug）
-date_format = f"%b{month_unit}%d{day_unit} %Y"
-
-# 正規表現（英語月名 + 日 + , + 年）
-date_regex = rf"([A-Za-z]{{3}}){month_unit}(\d{{1,2}}){day_unit}\s+(\d{{4}})"
+date_format = f"%Y{year_unit}%m{month_unit}%d{day_unit}"
+date_regex = rf"(\d{{2,4}}){year_unit}(\d{{1,2}}){month_unit}(\d{{1,2}}){day_unit}"
 
 # ===== ポップアップ順序クリック設定 =====
 POPUP_MODE = 0  # 1: 実行 / 0: スキップ
@@ -115,6 +112,6 @@ with sync_playwright() as p:
         print("⚠ 抽出できた記事がありません。HTML構造が変わっている可能性があります。")
 
     os.makedirs("rss_output", exist_ok=True)
-    rss_path = "rss_output/Feed2.xml"
+    rss_path = "rss_output/Feed2-2.xml"
     generate_rss(items, rss_path, BASE_URL, GAKKAI)
     browser.close()

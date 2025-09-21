@@ -27,7 +27,7 @@ from browser_utils import click_button_in_order
 
 # ===== 固定情報（学会サイト） =====
 BASE_URL = "https://www.hisamitsu.co.jp/"
-GAKKAI = "久光製薬"
+GAKKAI = "久光製薬(ニュース)"
 
 SELECTOR_TITLE = "ul.whatsnew__list li"
 title_selector = "a"
